@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bus Adding</title>
+  <link rel="stylesheet" href="cssfile/sidebar.css">
+  <link rel="stylesheet" href="cssfile/signUp.css">
+  <style>
+    body {
+      background-image: url("image/20.jpg");
+      background-position: center;
+      background-size: cover;
+      height: 700px;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+    .adminTopic { text-align: center; color: #fff; }
+    .idclass {
+      width: 100%;
+      border-radius: 3px;
+      border: 1px solid #9597a6;
+      padding: 10px;
+      outline: none;
+      color: black;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar2">
+    <div class="wrapper">
+      <div class="registration_form">
+        <div class="title">Bus Adding</div>
+
+        <form id="busForm">
+          <div class="form_wrap">
+            <div class="input_wrap">
+              <label for="bus_name">Bus Name</label>
+              <input type="text" id="bus_name" name="bus_name" placeholder="Bus Name" required>
+            </div>
+            <div class="input_wrap">
+              <label for="tel">Telephone</label>
+              <input type="text" id="tel" name="tel" placeholder="Tel" required>
+            </div>
+            <div class="input_wrap">
+              <button type="submit" class="submit_btn">Add Bus Now</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("busForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = Object.fromEntries(new FormData(e.target));
+      const res = await fetch("http://localhost:5000/api/buses", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+      });
+      c
