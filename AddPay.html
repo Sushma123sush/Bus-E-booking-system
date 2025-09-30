@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Payment Page</title>
+  <link rel="stylesheet" href="cssfile/payment.css">
+</head>
+<body>
+
+<div class="container">
+
+  <form id="paymentForm">
+
+    <div class="row">
+
+      <div class="col">
+        <h3 class="title">Billing Address</h3>
+        <div class="inputBox">
+          <span>Amount You Pay :</span>
+          <input type="number" name="amount" value="200.00" required>
+        </div>
+        <div class="inputBox">
+          <span>Name :</span>
+          <input type="text" name="name" value="John Doe" required>
+        </div>
+        <div class="inputBox">
+          <span>Email :</span>
+          <input type="email" name="email" value="john@example.com" required>
+        </div>
+        <div class="inputBox">
+          <span>Address :</span>
+          <input type="text" name="address" required>
+        </div>
+        <div class="inputBox">
+          <span>City :</span>
+          <input type="text" name="city" placeholder="Mumbai" required>
+        </div>
+        <div class="flex">
+          <div class="inputBox">
+            <span>State :</span>
+            <input type="text" name="state" placeholder="India" required>
+          </div>
+          <div class="inputBox">
+            <span>Zip Code :</span>
+            <input type="text" name="zip" placeholder="123 456" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <h3 class="title">Payment</h3>
+        <div class="inputBox">
+          <span>Name on Card :</span>
+          <input type="text" name="cardName" placeholder="Mr. John Doe" required>
+        </div>
+        <div class="inputBox">
+          <span>Credit Card Number :</span>
+          <input type="number" name="cardNumber" placeholder="1111-2222-3333-4444" required>
+        </div>
+        <div class="inputBox">
+          <span>Exp Month :</span>
+          <input type="text" name="expM" placeholder="January" required>
+        </div>
+        <div class="flex">
+          <div class="inputBox">
+            <span>Exp Year :</span>
+            <input type="number" name="expY" placeholder="2025" required>
+          </div>
+          <div class="inputBox">
+            <span>CVV :</span>
+            <input type="text" name="cvv" placeholder="1234" required>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <input type="submit" value="Proceed to Checkout" class="submit-btn">
+
+  </form>
+
+</div>
+
+<script>
+  document.getElementById("paymentForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const formData = Object.fromEntries(new FormData(e.target));
+    const res = await fetch("http://localhost:5000/api/payments", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData)
+    });
+    const result = await res.json();
+    alert(result.message);
+    e.target.reset();
+  });
+</script>
+
+</body>
+</html>
