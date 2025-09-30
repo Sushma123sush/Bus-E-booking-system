@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Booking Page</title>
+  <link rel="stylesheet" href="cssfile/sidebar.css">
+  <link rel="stylesheet" href="cssfile/signUp.css">
+  <style>
+    body {
+      background-image: url("image/1.jpg");
+      background-position: center;
+      background-size: cover;
+      height: 700px;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+    .adminTopic { text-align: center; color: #fff; }
+    table { width:99%; margin:auto; margin-top:50px; background:#fff; border-radius:10px; }
+    table th, table td { padding:10px; border-bottom:2px solid #bbb; text-align:center; }
+    button { border:2px solid yellow; border-radius:7px; background:red; color:white; cursor:pointer; }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar2">
+    <h1 class="adminTopic">Get Your Ticket...</h1>
+
+    <!-- Bus List -->
+    <table id="busTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Bus Name</th>
+          <th>Tel</th>
+          <th>Book Now</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <!-- Booking Form -->
+    <div class="wrapper">
+      <div class="registration_form">
+        <div class="title">Booking a Ticket...</div>
+
+        <form id="bookingForm">
+          <div class="form_wrap">
+            <div class="input_wrap">
+              <label>Passenger Name</label>
+              <input type="text" name="passenger_name" required>
+            </div>
+            <div class="input_wrap">
+              <label>Telephone</label>
+              <input type="text" name="tel" required>
+            </div>
+            <div class="input_wrap">
+              <label>Email</label>
+              <input type="email" name="email" required>
+            </div>
+            <div class="input_wrap">
+              <label>Board Place</label>
+              <input type="text" name="board_place" required>
+            </div>
+            <div class="input_wrap">
+              <label>Destination</label>
+              <input type="text" name="destination" required>
+            </div>
+            <div class="input_wrap">
+              <button type="submit" class="submit_btn">Book Now</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Fetch buses
+    fetch("http://localhost:5000/api/buses")
+      .then(res => res.json())
+      .then(data => {
+        const tbody = document.querySelector("#busTable tbody");
+        data.forEach(bus => {
+          tbody.innerHTML += `
+            <tr>
+              <td>${bus.id}</td>
+              <td>${bus.Bus_Name}</td>
+              <td>${bus.Tel}</td>
+              <td><button onclick="alert('Proceed to booking form below')">Book Now</button></td>
+            </tr>`;
+        });
+      });
+
+    // Submit booking form
+    document.getElementById("bookingForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = Object.fromEntries(new FormData(e.target));
+      const res = await fetch("http://localhost:5000/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+      });
+      const result = await res.json();
+      alert(result.message);
+    });
+  </script>
+
+</body>
+</html>
