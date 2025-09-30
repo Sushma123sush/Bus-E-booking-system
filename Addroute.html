@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Routes Adding</title>
+  <link rel="stylesheet" href="cssfile/sidebar.css">
+  <link rel="stylesheet" href="cssfile/signUp.css">
+</head>
+<body>
+
+<div class="wrapper">
+  <div class="registration_form">
+    <div class="title">Routes Adding</div>
+
+    <form id="routeForm">
+      <div class="form_wrap">
+        <div class="input_wrap">
+          <label>Via City</label>
+          <input type="text" name="via_city" required>
+        </div>
+
+        <div class="input_wrap">
+          <label>Destination</label>
+          <input type="text" name="destination" required>
+        </div>
+
+        <div class="input_wrap">
+          <label>Bus Name</label>
+          <input type="text" name="bus_name" required>
+        </div>
+
+        <div class="input_wrap">
+          <label>Departure Date</label>
+          <input type="date" name="departure_date" required>
+        </div>
+
+        <div class="input_wrap">
+          <label>Departure Time</label>
+          <input type="time" name="departure_time" required>
+        </div>
+
+        <div class="input_wrap">
+          <label>Cost</label>
+          <input type="number" name="cost" required>
+        </div>
+
+        <div class="input_wrap">
+          <button type="submit">Add Route Now</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+document.getElementById("routeForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const formData = Object.fromEntries(new FormData(e.target));
+
+  try {
+    const res = await fetch("http://localhost:5000/api/routes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData)
+    });
+    const data = await res.json();
+    alert(data.message);
+    e.target.reset();
+  } catch (err) {
+    alert("Error adding route: " + err.message);
+  }
+});
+</script>
+
+</body>
+</html>
