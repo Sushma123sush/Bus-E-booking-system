@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel Buses</title>
+  <!-- CDN icon library -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="cssfile/sidebar.css">
+  <link rel="stylesheet" href="cssfile/signUp.css">
+
+  <style>
+    body {
+      background-image: url("image/20.jpg");
+      background-position: center;
+      background-size: cover;
+      height: 700px;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+    .adminTopic {
+      text-align: center;
+      color: #fff;
+    }
+    .form_wrap .submit_btn:hover {
+      color:#fff;
+      font-weight: 600;
+    }
+    #description, .idclass {
+      width: 100%;
+      border-radius: 3px;
+      border: 1px solid #9597a6;
+      padding: 10px;
+      outline: none;
+      color: black;
+    }
+  </style>
+</head>
+<body>
+  <input type="checkbox" id="check">
+  <label for="check">
+    <i class="fa fa-bars" id="btn"></i>
+    <i class="fa fa-times" id="cancle"></i>
+  </label>
+
+  <div class="sidebar">
+    <header><img src="image/Re.png">
+      <p id="username">Admin</p>
+    </header>
+    <ul>
+      <li><a href="adminDash.html">Manage Routes</a></li>
+      <li><a href="ManagesBuses.html">Manage Buses</a></li>
+      <li><a href="BookingManage.html">Booking People</a></li>
+      <li><a href="PaymentManage.html">Transaction</a></li>
+      <li><a href="adminLogout.html">Logout</a></li>
+    </ul>
+  </div>
+
+  <div class="sidebar2">
+    <div class="wrapper">
+      <div class="registration_form">
+        <div class="title">Buses Update/Edit</div>
+
+        <form id="busForm">
+          <div class="form_wrap">
+            <div class="input_wrap">
+              <label for="busId">Id</label>
+              <input type="number" id="busId" name="id" class="idclass">
+            </div>
+            
+            <div class="input_wrap">
+              <label for="busName">Bus Name</label>
+              <input type="text" id="busName" name="bus_name" placeholder="Bus Name" required>
+            </div>
+
+            <div class="input_wrap">
+              <label for="tel">Telephone</label>
+              <input type="text" id="tel" name="tel" placeholder="Tel" required>
+            </div>
+
+            <div class="input_wrap">
+              <input type="submit" value="Update Bus Now" class="submit_btn">
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Get ID from URL (like ?id=3)
+    const urlParams = new URLSearchParams(window.location.search);
+    const busId = urlParams.get("id");
+    if (busId) {
+      document.getElementById("busId").value = busId;
+    }
+
+    // Handle form submission
+    document.getElementById("busForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const id = document.getElementById("busId").value;
+      const busName = document.getElementById("busName").value;
+      const tel = document.getElementById("tel").value;
+
+      try {
+        const res = await fetch("http://localhost:3000/api/buses/" + id, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ bus_name: busName, tel: tel })
+        });
+
+        if (res.ok) {
+          alert("Bus updated successfully!");
+          window.location.href = "ManagesBuses.html";
+        } else {
+          alert("Failed to update bus!");
+        }
+      } catch (error) {
+        console.error("Error updating bus:", error);
+        alert("Something went wrong!");
+      }
+    });
+  </script>
+</body>
+</html>
