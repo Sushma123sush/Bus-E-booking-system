@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel of Bus Services</title>
+  <!--cdn icon library -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="cssfile/sidebar.css">
+
+  <style>
+    body {
+      background-image: url("image/20.jpg");
+      background-position: center;
+      background-size: cover;
+      height: 700px;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+    .adminTopic {
+      text-align: center;
+      color: #fff;
+    }
+    table {
+      width: 99%;
+      border-collapse: separate !important;
+      margin: auto;
+      text-align: center;
+      margin-top: 50px;
+      background-color: rgb(255, 255, 255);
+      border-radius: 10px 10px 0px 0px;
+    }
+    table th {
+      border-bottom: 2px solid rgb(187, 187, 187);
+      padding: 10px 0px;
+    }
+    table tr td {
+      border-right: 2px solid rgb(187, 187, 187);
+      height: 58px;
+      padding: 22px 0px;
+      border-bottom: 2px solid rgb(187, 187, 187);
+      font-size: 20px;
+    }
+    table tr td button {
+      border: 2px solid yellow;
+      border-radius: 7px;
+      background-color: red;
+      color: white;
+      cursor: pointer;
+      padding: 5px;
+    }
+    .btnPolicy {
+      padding: 5px;
+      border: 2px solid yellow;
+      border-radius: 7px;
+      background-color: red;
+      color: white;
+      margin-left: 20px;
+      cursor: pointer;
+    }
+    .btnPolicy:hover {
+      background: red;
+      padding: 7px;
+    }
+  </style>
+</head>
+<body>
+  <input type="checkbox" id="check">
+  <label for="check">
+    <i class="fa fa-bars" id="btn"></i>
+    <i class="fa fa-times" id="cancle"></i>
+  </label>
+
+  <div class="sidebar">
+    <header>
+      <img src="image/Re.png">
+      <p id="username">Admin</p>
+    </header>
+    <ul>
+      <li><a href="adminDash.html">Manage Routes</a></li>
+      <li><a href="ManagesBuses.html">Manage Buses</a></li>
+      <li><a href="BookingManage.html">Booking People</a></li>
+      <li><a href="PaymentManage.html">Transaction</a></li>
+      <li><a href="adminLogout.html">Logout</a></li>
+    </ul>
+  </div>
+
+  <div class="sidebar2">
+    <h1 class="adminTopic">Manage Route of Buses</h1>
+
+    <table id="routesTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Via City</th>
+          <th>Destination</th>
+          <th>Bus Name</th>
+          <th>Departure Date</th>
+          <th>Departure Time</th>
+          <th>Cost</th>
+          <th>Update</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Filled dynamically with JS -->
+      </tbody>
+    </table>
+
+    <br>
+    <a href="Addroute.html"><button class="btnPolicy">Add Route</button></a>
+  </div>
+
+  <script>
+    async function loadRoutes() {
+      try {
+        const res = await fetch("http://localhost:3000/api/routes"); // Your Node.js API
+        const routes = await res.json();
+        const tbody = document.querySelector("#routesTable tbody");
+        tbody.innerHTML = "";
+
+        routes.forEach(route => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${route.id}</td>
+            <td>${route.via_city}</td>
+            <td>${route.destination}</td>
+            <td>${route.bus_name}</td>
+            <td>${route.departure_date}</td>
+            <td>${route.departure_time}</td>
+            <td>${route.cost}</td>
+            <td>
+              <button><a href="updateRoute.html?id=${route.id}" style="color:white; text-decoration:none;">Update</a></button>
+            </td>
+            <td>
+              <button onclick="deleteRoute(${route.id})">Delete</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        console.error("Error loading routes:", err);
+      }
+    }
+
+    async function deleteRoute(id) {
+      if (confirm("Are you sure you want to delete this route?")) {
+        const res = await fetch(`http://localhost:3000/api/routes/${id}`, { method: "DELETE" });
+        if (res.ok) {
+          alert("Route deleted successfully!");
+          loadRoutes();
+        } else {
+          alert("Failed to delete route");
+        }
+      }
+    }
+
+    loadRoutes();
+  </script>
+</body>
+</html>
